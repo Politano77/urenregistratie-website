@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root";  // Default in XAMPP
-$password = "";      // Default empty in XAMPP
+$username = "root";  
+$password = "";      
 $dbname = "time_tracking";
 
 $conn = new mysqli($servername, $username, $password, $dbname);

@@ -5,19 +5,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $email = $_POST['email'] ?? '';
+    $hourly_rate = $_POST['hourly_rate'] ?? '';
     $password = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, hourly_rate, password) VALUES (?, ?, ?, ?, ?)");
     if ($stmt === false) {
         $error = "Error preparing statement: " . $conn->error;
     } else {
-        $stmt->bind_param("ssss", $first_name, $last_name, $email, $password);
+        $stmt->bind_param("sssss", $first_name, $last_name, $email, $hourly_rate, $password);
         if ($stmt->execute()) {
             header("Location: index.php");
             exit();
         } else {
             $error = "Registration failed: " . $stmt->error;
         }
+
         $stmt->close();
     }
 }
@@ -29,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Time Tracking</title>
-    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
@@ -51,12 +52,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
+                <label for="hourly-rate">Uurloon:</label>
+                <input type="number" step="0.01" id="hourly-rate" name="hourly_rate" required>
+            </div>
+            <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        <p><a href="index.php">Already have an account? Log in</a></p>
+        <p><a href="inlog.php">Already have an account? Log in</a></p>
     </div>
 </body>
 </html>
